@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    transition: background-color 300ms;
+  }
+
+  html.dark {
+    background-color: #111827; /* gray-900 */
+  }
+
+  html:not(.dark) {
+    background-color: #f3f4f6; /* gray-100 */
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    min-height: 100vh;
+    transition: background-color 300ms;
+  }
+
+  /* Mesh gradient backgrounds */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: theme("backgroundImage.mesh-gradient-light");
+    opacity: 0.1;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .dark body::before {
+    background-image: theme("backgroundImage.mesh-gradient-dark");
+    opacity: 0.15;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 4px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(75, 85, 99, 0.5);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.7);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(75, 85, 99, 0.7);
+  }
+}
