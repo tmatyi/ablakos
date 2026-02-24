@@ -26,7 +26,7 @@ export const createGame = async (playerIds) => {
     });
     return docRef.id;
   } catch (error) {
-    console.error("Error creating game:", error);
+    console.error("Hiba a játék létrehozásakor:", error);
     throw error;
   }
 };
@@ -43,12 +43,12 @@ export const subscribeToGame = (gameId, callback) => {
           ...docSnapshot.data(),
         });
       } else {
-        console.error("Game document not found");
+        console.error("A játék dokumentum nem található");
         callback(null);
       }
     },
     (error) => {
-      console.error("Error in game subscription:", error);
+      console.error("Hiba a játék feliratkozásában:", error);
       callback(null);
     },
   );
@@ -72,7 +72,7 @@ export const addRoundToGame = async (gameId, roundScores) => {
 
     return true;
   } catch (error) {
-    console.error("Error adding round to game:", error);
+    console.error("Hiba a kör hozzáadásakor a játékhoz:", error);
     throw error;
   }
 };
@@ -122,7 +122,7 @@ export const checkGameEnd = async (gameId) => {
 
     return false;
   } catch (error) {
-    console.error("Error checking game end:", error);
+    console.error("Hiba a játék végének ellenőrzésekor:", error);
     return false;
   }
 };
@@ -147,7 +147,7 @@ export const getCompletedGames = async () => {
 
     return games;
   } catch (error) {
-    console.error("Error getting completed games:", error);
+    console.error("Hiba a befejezett játékok lekérdezésekor:", error);
     throw error;
   }
 };

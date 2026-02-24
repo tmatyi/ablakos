@@ -1,10 +1,40 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read/write access to all collections for now
-    // This is for development - tighten these rules for production!
+    // Players collection rules
+    match /players/{playerId} {
+      // Allow read access for authenticated users
+      allow read: if request.auth != null;
+      
+      // Allow create if user is authenticated
+      allow create: if request.auth != null;
+      
+      // Allow update if user owns the document OR is admin
+      allow update: if request.auth != null && 
+        (resource.data.uid == request.auth.uid || request.auth.token.email == 'takacsmatyas77@gmail.com');
+      
+      // Allow delete only for admin (takacsmatyas77@gmail.com)
+      allow delete: if request.auth != null && request.auth.token.email == 'takacsmatyas77@gmail.com';
+    }
+    
+    // Games collection rules
+    match /games/{gameId} {
+      // Allow read access for authenticated users
+      allow read: if request.auth != null;
+      
+      // Allow create if user is authenticated
+      allow create: if request.auth != null;
+      
+      // Allow update if user is authenticated
+      allow update: if request.auth != null;
+      
+      // Allow delete only for admin
+      allow delete: if request.auth != null && request.auth.token.email == 'takacsmatyas77@gmail.com';
+    }
+    
+    // Default deny for all other collections
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if false;
     }
   }
 }

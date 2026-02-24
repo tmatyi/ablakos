@@ -106,7 +106,7 @@ const GameView = ({ gameId, onEndGame }) => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center transition-colors duration-300">
             <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">
-              Loading game...
+              Játék betöltése...
             </p>
           </div>
         </div>
@@ -120,13 +120,13 @@ const GameView = ({ gameId, onEndGame }) => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center transition-colors duration-300">
             <p className="text-red-500 dark:text-red-400 transition-colors duration-300">
-              Game not found
+              A játék nem található
             </p>
             <button
               onClick={onEndGame}
               className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
             >
-              Back to Menu
+              Vissza a menübe
             </button>
           </div>
         </div>
@@ -135,44 +135,50 @@ const GameView = ({ gameId, onEndGame }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8 transition-colors duration-300">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 transition-colors duration-300">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
-                {isGameCompleted ? "Game Completed" : "Game in Progress"}
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+      <div className="max-w-6xl mx-auto">
+        {/* Compact Header */}
+        <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 truncate">
+                {isGameCompleted ? "Játék befejezve" : "Játék folyamatban"}
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                Game ID: {gameId}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                Rounds played: {game.rounds?.length || 0}
-              </p>
+              <div className="flex items-center gap-4 mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <span>ID: {gameId}</span>
+                <span>Körök: {game.rounds?.length || 0}</span>
+              </div>
             </div>
             <button
               onClick={onEndGame}
-              className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-colors font-medium"
+              className="flex-shrink-0 bg-red-600 text-white py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-colors font-medium text-sm"
             >
-              End Game
+              Befejezés
             </button>
           </div>
+        </div>
 
-          {/* Winner Declaration */}
-          {isGameCompleted && winner && (
-            <div className="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-600 rounded-lg p-6 text-center transition-colors duration-300">
-              <div className="text-6xl mb-4">🏆</div>
-              <h3 className="text-2xl font-bold text-green-800 dark:text-green-300 mb-2 transition-colors duration-300">
-                {winner.name} Wins!
-              </h3>
-              <p className="text-green-600 dark:text-green-400 transition-colors duration-300">
-                Congratulations on achieving the lowest score!
-              </p>
+        {/* Winner Banner - Compact */}
+        {isGameCompleted && winner && (
+          <div className="bg-green-50 dark:bg-green-900/20 border-b border-green-200 dark:border-green-600 px-4 py-3">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-2xl sm:text-3xl">🏆</span>
+              <div className="text-center">
+                <h3 className="text-base sm:text-lg font-bold text-green-800 dark:text-green-300">
+                  {winner.name} nyert!
+                </h3>
+                <p className="text-xs sm:text-sm text-green-600 dark:text-green-400">
+                  Legalacsonyabb pontszám
+                </p>
+              </div>
             </div>
-          )}
+          </div>
+        )}
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Scoreboard game={game} players={gamePlayers} />
+        {/* Main Content - Full Width */}
+        <div className="flex-1 p-2 sm:p-4">
+          <div className="space-y-3 sm:space-y-4">
+            {/* Add Round Form - Always First */}
             {!isGameCompleted && (
               <AddRoundForm
                 gameId={gameId}
@@ -180,27 +186,29 @@ const GameView = ({ gameId, onEndGame }) => {
                 onGameEnd={handleGameEnd}
               />
             )}
-          </div>
 
-          {/* Chart Section */}
-          <div className="mt-6">
-            {/* Chart Toggle Button */}
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 transition-colors duration-300">
-                Score Progression
-              </h3>
-              <button
-                onClick={() => setShowChart(!showChart)}
-                className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-300"
-              >
-                {showChart ? "Hide Chart" : "Show Chart"}
-              </button>
+            {/* Scoreboard - Second */}
+            <Scoreboard game={game} players={gamePlayers} />
+
+            {/* Chart Section - Third */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                  Pontmenet
+                </h3>
+                <button
+                  onClick={() => setShowChart(!showChart)}
+                  className="px-3 py-1 text-xs font-medium bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
+                >
+                  {showChart ? "Elrejtés" : "Mutatás"}
+                </button>
+              </div>
+              {showChart && (
+                <div className="p-2 sm:p-3">
+                  <GameChart rounds={game.rounds || []} players={gamePlayers} />
+                </div>
+              )}
             </div>
-
-            {/* Chart */}
-            {showChart && (
-              <GameChart rounds={game.rounds || []} players={gamePlayers} />
-            )}
           </div>
         </div>
       </div>

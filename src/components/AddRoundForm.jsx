@@ -73,7 +73,7 @@ const AddRoundForm = ({ gameId, players, onGameEnd }) => {
       });
       setRoundScores(resetScores);
     } catch (err) {
-      setError("Failed to add round. Please try again.");
+      setError("A kör hozzáadása sikertelen. Próbálja újra.");
       console.error("Error adding round:", err);
     } finally {
       setIsSubmitting(false);
@@ -87,7 +87,7 @@ const AddRoundForm = ({ gameId, players, onGameEnd }) => {
       className="backdrop-blur-md bg-white/80 dark:bg-gray-800/50 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6 transition-colors duration-300"
     >
       <h3 className="text-xl font-display font-bold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
-        Add Round
+        Új kör rögzítése
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -104,9 +104,19 @@ const AddRoundForm = ({ gameId, players, onGameEnd }) => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 + index * 0.1 }}
-              className="w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center text-white font-bold text-lg"
+              className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
             >
-              {player.name.charAt(0).toUpperCase()}
+              {player.photoURL ? (
+                <img
+                  src={player.photoURL}
+                  alt={player.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-brand-gradient flex items-center justify-center text-white font-bold text-lg">
+                  {player.name.charAt(0).toUpperCase()}
+                </div>
+              )}
             </motion.div>
 
             {/* Player Name */}
@@ -189,10 +199,10 @@ const AddRoundForm = ({ gameId, players, onGameEnd }) => {
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
               </motion.svg>
-              Adding Round...
+              Kör hozzáadása...
             </span>
           ) : (
-            "Add Round"
+            "Új kör rögzítése"
           )}
         </PremiumButton>
       </form>

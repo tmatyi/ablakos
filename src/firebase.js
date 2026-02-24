@@ -5,7 +5,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCuTkE6Eo7cnEW-jJUzLHYE7VwOXwKw-CE",
-  authDomain: "ablakos.firebaseapp.com",
+  authDomain: "ablakos.firebaseapp.com", // Use Firebase default for OAuth
   projectId: "ablakos",
   storageBucket: "ablakos.firebasestorage.app",
   messagingSenderId: "776759773698",

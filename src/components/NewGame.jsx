@@ -53,7 +53,7 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
       className="backdrop-blur-md bg-white/80 dark:bg-gray-800/50 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6 mb-6 transition-colors duration-300"
     >
       <h2 className="text-xl font-display font-bold text-gray-800 dark:text-gray-100 mb-4 transition-colors duration-300">
-        Start New Game
+        Új játék indítása
       </h2>
 
       {players.length === 0 ? (
@@ -63,7 +63,7 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
           className="text-center py-8"
         >
           <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">
-            No players available. Add some players first!
+            Nincs elérhető játékos. Először adjon hozzá játékosokat!
           </p>
         </motion.div>
       ) : (
@@ -144,9 +144,19 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.15 + index * 0.05 }}
-                      className="ml-4 w-10 h-10 rounded-full bg-brand-gradient flex items-center justify-center text-white font-bold text-lg"
+                      className="ml-4 w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
                     >
-                      {player.name.charAt(0).toUpperCase()}
+                      {player.photoURL ? (
+                        <img
+                          src={player.photoURL}
+                          alt={player.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-brand-gradient flex items-center justify-center text-white font-bold text-lg">
+                          {player.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
                     </motion.div>
 
                     {/* Player Info */}
@@ -156,19 +166,7 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
                       transition={{ delay: 0.2 + index * 0.05 }}
                       className="ml-3 flex-1"
                     >
-                      <div
-                        className={`font-semibold ${
-                          isSelected
-                            ? "text-brand-700 dark:text-brand-300"
-                            : "text-gray-900 dark:text-gray-100"
-                        } transition-colors duration-300`}
-                      >
-                        {player.name}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
-                        Wins: {player.stats?.wins || 0} • Matches:{" "}
-                        {player.stats?.matchesPlayed || 0}
-                      </div>
+                      <div className="font-semibold">{player.name}</div>
                     </motion.div>
 
                     {/* Selection Indicator */}
@@ -198,7 +196,7 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                Selected Players:
+                Kiválasztott játékosok:
               </span>
               <motion.span
                 key={selectedPlayers.length}
@@ -213,7 +211,7 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
                       : "text-gray-500 dark:text-gray-400"
                 } transition-colors duration-300`}
               >
-                {selectedPlayers.length} / 3+ required
+                {selectedPlayers.length} / 3+ szükséges
               </motion.span>
             </div>
 
@@ -223,9 +221,11 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-2 text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300"
               >
-                {selectedPlayers.length === 1 && "Add 2 more players to start"}
-                {selectedPlayers.length === 2 && "Add 1 more player to start"}
-                {selectedPlayers.length >= 3 && "Ready to start!"}
+                {selectedPlayers.length === 1 &&
+                  "Még 2 játékos szükséges a kezdéshez"}
+                {selectedPlayers.length === 2 &&
+                  "Még 1 játékos szükséges a kezdéshez"}
+                {selectedPlayers.length >= 3 && "Készen áll a kezdésre!"}
               </motion.div>
             )}
           </motion.div>
@@ -256,10 +256,10 @@ const NewGame = ({ players, onStartGame, isCreatingGame }) => {
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                   />
                 </motion.svg>
-                Creating Game...
+                Játék létrehozása...
               </span>
             ) : (
-              `Start Game ${selectedPlayers.length > 0 ? `(${selectedPlayers.length} players)` : ""}`
+              `Játék indítása ${selectedPlayers.length > 0 ? `(${selectedPlayers.length} játékos)` : ""}`
             )}
           </PremiumButton>
         </>

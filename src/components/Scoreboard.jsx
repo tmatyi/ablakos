@@ -37,7 +37,7 @@ const Scoreboard = ({ game, players }) => {
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-display font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
-        Scoreboard
+        Eredménytábla
       </h3>
 
       {players.length === 0 ? (
@@ -47,7 +47,7 @@ const Scoreboard = ({ game, players }) => {
           className="backdrop-blur-md bg-white/80 dark:bg-gray-800/50 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/20 p-8 text-center transition-colors duration-300"
         >
           <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">
-            No players in game
+            Nincs játékos a játékban
           </p>
         </motion.div>
       ) : (
@@ -102,13 +102,25 @@ const Scoreboard = ({ game, players }) => {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 + index * 0.1 }}
-                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
-                          isWinner
-                            ? "bg-brand-gradient text-white"
-                            : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
-                        }`}
+                        className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
                       >
-                        {player.name.charAt(0).toUpperCase()}
+                        {player.photoURL ? (
+                          <img
+                            src={player.photoURL}
+                            alt={player.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div
+                            className={`w-full h-full flex items-center justify-center font-bold text-lg ${
+                              isWinner
+                                ? "bg-brand-gradient text-white"
+                                : "bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
+                            }`}
+                          >
+                            {player.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
                       </motion.div>
 
                       {/* Player Name */}

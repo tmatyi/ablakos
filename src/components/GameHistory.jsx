@@ -22,7 +22,7 @@ const GameHistory = () => {
 
   const getPlayerNameById = (playerId) => {
     const player = players.find((p) => p.id === playerId);
-    return player ? player.name : `Player ${playerId}`;
+    return player ? player.name : `Játékos ${playerId}`;
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const GameHistory = () => {
         setPlayers(playersData);
         setError("");
       } catch (err) {
-        setError("Failed to load game history");
+        setError("A játéktörténet betöltése sikertelen");
         console.error("Error fetching game history:", err);
       } finally {
         setLoading(false);
@@ -50,7 +50,7 @@ const GameHistory = () => {
 
   // Helper function to get winner name from game data
   const getWinnerName = (game) => {
-    if (!game || !game.rounds) return "Unknown";
+    if (!game || !game.rounds) return "Ismeretlen";
 
     const scores = {};
 
@@ -81,12 +81,12 @@ const GameHistory = () => {
       }
     });
 
-    return winnerId ? getPlayerNameById(winnerId) : "Unknown";
+    return winnerId ? getPlayerNameById(winnerId) : "Ismeretlen";
   };
 
   // Helper function to format date
   const formatDate = (timestamp) => {
-    if (!timestamp) return "Unknown date";
+    if (!timestamp) return "Ismeretlen dátum";
 
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     return (
@@ -99,7 +99,7 @@ const GameHistory = () => {
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-display font-bold text-gray-800 dark:text-gray-100 transition-colors duration-300">
-        Game History
+        Játéktörténet
       </h3>
 
       {loading ? (
@@ -109,7 +109,7 @@ const GameHistory = () => {
           className="backdrop-blur-md bg-white/80 dark:bg-gray-800/50 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/20 p-8 text-center transition-colors duration-300"
         >
           <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">
-            Loading game history...
+            Játéktörténet betöltése...
           </p>
         </motion.div>
       ) : error ? (
@@ -129,7 +129,7 @@ const GameHistory = () => {
           className="backdrop-blur-md bg-white/80 dark:bg-gray-800/50 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/20 p-8 text-center transition-colors duration-300"
         >
           <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">
-            No completed games yet
+            Még nincsenek befejezett játékok
           </p>
         </motion.div>
       ) : (
@@ -179,7 +179,7 @@ const GameHistory = () => {
                                     game.startedAt.seconds * 1000,
                                   ).toLocaleDateString()
                                 : new Date(game.startedAt).toLocaleDateString()
-                            : "Unknown date"}
+                            : "Ismeretlen dátum"}
                       </motion.div>
                       <motion.div
                         initial={{ opacity: 0, x: -20 }}
@@ -187,7 +187,7 @@ const GameHistory = () => {
                         transition={{ delay: 0.2 + index * 0.1 }}
                         className="text-lg font-display font-semibold text-green-600 dark:text-green-400 transition-colors duration-300"
                       >
-                        {winnerName} won!
+                        {winnerName} nyert!
                       </motion.div>
                       <motion.div
                         initial={{ opacity: 0, x: -20 }}
@@ -195,8 +195,8 @@ const GameHistory = () => {
                         transition={{ delay: 0.3 + index * 0.1 }}
                         className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300"
                       >
-                        {game.playerIds?.length || 0} players •{" "}
-                        {game.rounds?.length || 0} rounds
+                        {game.playerIds?.length || 0} játékos •{" "}
+                        {game.rounds?.length || 0} kör
                       </motion.div>
                     </div>
                     <motion.button

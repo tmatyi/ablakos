@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { AnimatePresence, motion } from "framer-motion";
 import Layout from "./components/Layout";
+import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
 import Dashboard from "./components/Dashboard";
@@ -13,7 +14,11 @@ import GameHistory from "./components/GameHistory";
 import ThemeToggle from "./components/ThemeToggle";
 import { subscribeToPlayers } from "./services/playerService";
 import { createGame } from "./services/gameService";
-import { getOrCreatePlayerProfile } from "./services/playerService";
+import {
+  getOrCreatePlayerProfile,
+  updatePlayerActiveGame,
+  getPlayerActiveGame,
+} from "./services/playerService";
 import "./App.css";
 
 // Main App Content with auth integration
@@ -39,17 +44,53 @@ function AppContent() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Sync activeGameId with Firestore
+  useEffect(() => {
+    if (currentUser) {
+      // Load active game from Firestore when user logs in
+      const loadActiveGame = async () => {
+        try {
+          const gameId = await getPlayerActiveGame(currentUser.uid);
+          setActiveGameId(gameId);
+        } catch (error) {
+          console.error("Error loading active game:", error);
+        }
+      };
+      loadActiveGame();
+    } else {
+      // Clear active game when user logs out
+      setActiveGameId(null);
+    }
+  }, [currentUser]);
+
+  // Save activeGameId to Firestore when it changes
+  useEffect(() => {
+    if (currentUser) {
+      const saveActiveGame = async () => {
+        try {
+          await updatePlayerActiveGame(currentUser.uid, activeGameId);
+        } catch (error) {
+          console.error("Error saving active game:", error);
+        }
+      };
+      saveActiveGame();
+    }
+  }, [activeGameId, currentUser]);
+
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   // Subscribe to players
   useEffect(() => {
-    const unsubscribe = subscribeToPlayers((playersData) => {
-      setPlayers(playersData);
-    });
-    return () => unsubscribe();
-  }, []);
+    // Only subscribe to players if user is authenticated
+    if (currentUser) {
+      const unsubscribe = subscribeToPlayers((playersData) => {
+        setPlayers(playersData);
+      });
+      return () => unsubscribe();
+    }
+  }, [currentUser]);
 
   // Handle user login - create/get player profile
   useEffect(() => {
@@ -60,7 +101,7 @@ function AppContent() {
 
   const handleStartGame = async (playerIds) => {
     if (playerIds.length < 3) {
-      setGameError("Need at least 3 players to start a game");
+      setGameError("Legalább 3 játékos szükséges a játék indításához");
       return;
     }
     try {
@@ -70,7 +111,7 @@ function AppContent() {
       setActiveGameId(gameId);
       setActiveTab("home"); // Switch to home to show the game
     } catch (error) {
-      setGameError("Failed to create game. Please try again.");
+      setGameError("A játék létrehozása sikertelen. Próbálja újra.");
       console.error("Error creating game:", error);
     } finally {
       setIsCreatingGame(false);
@@ -101,7 +142,7 @@ function AppContent() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+          <p className="text-gray-600 dark:text-gray-400">Betöltés...</p>
         </div>
       </div>
     );
@@ -162,7 +203,6 @@ function AppContent() {
             transition={{ duration: 0.3 }}
           >
             <div className="space-y-6">
-              <AddPlayerForm />
               <NewGame
                 players={players}
                 onStartGame={handleStartGame}
@@ -174,6 +214,19 @@ function AppContent() {
                 </div>
               )}
             </div>
+          </motion.div>
+        );
+
+      case "players":
+        return (
+          <motion.div
+            key="players"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <PlayerList players={players} />
           </motion.div>
         );
 
@@ -209,6 +262,21 @@ function AppContent() {
     }
   };
 
+  // Show loading spinner while auth state is loading
+  if (loading) {
+    return (
+      <div className={`min-h-screen ${theme} flex items-center justify-center`}>
+        <div className="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Show LandingPage if user is not authenticated
+  if (!currentUser) {
+    return <LandingPage />;
+  }
+
+  // Show main app if user is authenticated
   return (
     <div className={`min-h-screen ${theme}`}>
       <div className="fixed top-4 right-4 z-50">

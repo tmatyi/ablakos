@@ -73,16 +73,33 @@ const StatsIcon = ({ className }) => (
   </svg>
 );
 
+const PlayersIcon = ({ className }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+    />
+  </svg>
+);
+
 const Layout = ({ children, activeTab, onTabChange }) => {
   const { currentUser } = useAuth();
 
   const tabs = [
-    { id: "home", label: "Home", icon: HomeIcon },
-    { id: "game", label: "New Game", icon: GameIcon },
-    { id: "history", label: "History", icon: HistoryIcon },
+    { id: "home", label: "Kezdőlap", icon: HomeIcon },
+    { id: "game", label: "Új játék", icon: GameIcon },
+    { id: "players", label: "Játékosok", icon: PlayersIcon },
+    { id: "history", label: "Előzmények", icon: HistoryIcon },
     {
       id: currentUser ? "profile" : "login",
-      label: currentUser ? "Profile" : "Login",
+      label: currentUser ? "Profil" : "Bejelentkezés",
       icon: currentUser ? StatsIcon : GameIcon,
     },
   ];

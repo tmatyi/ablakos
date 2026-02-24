@@ -31,36 +31,13 @@ const ResumeGameCard = ({ activeGame }) => (
     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-600/10 rounded-3xl"></div>
 
     <div className="relative z-10">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Resume Game
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Round {activeGame?.currentRound || 1} in progress
-          </p>
-        </div>
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          Játék folytatása
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          {activeGame?.currentRound || 1}. kör folyamatban
+        </p>
       </div>
 
       <PremiumButton
@@ -72,7 +49,7 @@ const ResumeGameCard = ({ activeGame }) => (
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        Return to Game
+        Vissza a játékhoz
       </PremiumButton>
     </div>
   </motion.div>
@@ -90,30 +67,13 @@ const StartNewGameCard = ({ onStartGame }) => (
     <div className="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-brand-600/10 rounded-3xl"></div>
 
     <div className="relative z-10">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Start New Game
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            Gather 3+ players and begin the fun
-          </p>
-        </div>
-        <div className="w-12 h-12 rounded-full bg-brand-gradient flex items-center justify-center">
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-        </div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          Új játék indítása
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          Gyűjts össze 2+ játékost és kezdj játszani!
+        </p>
       </div>
 
       <PremiumButton
@@ -123,7 +83,7 @@ const StartNewGameCard = ({ onStartGame }) => (
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        Create New Game
+        Új játék létrehozása
       </PremiumButton>
     </div>
   </motion.div>
@@ -141,7 +101,7 @@ const PersonalBestCard = ({ userStats }) => {
       className="backdrop-blur-md bg-white/80 dark:bg-gray-800/50 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6"
     >
       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-        Personal Best
+        Egyéni teljesítmény
       </h3>
 
       <div className="grid grid-cols-2 gap-4">
@@ -150,7 +110,7 @@ const PersonalBestCard = ({ userStats }) => {
             {userStats.stats.bestGameScore || "-"}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Best Score
+            Legkisebb pontos győzelem
           </div>
         </div>
         <div className="text-center">
@@ -163,20 +123,24 @@ const PersonalBestCard = ({ userStats }) => {
               : "0%"}
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Win Rate
+            Nyerési arány
           </div>
         </div>
       </div>
 
       <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600 dark:text-gray-400">Games Played</span>
+          <span className="text-gray-600 dark:text-gray-400">
+            Lejátszott meccs
+          </span>
           <span className="font-semibold text-gray-900 dark:text-gray-100">
             {userStats.stats.matchesPlayed}
           </span>
         </div>
         <div className="flex justify-between text-sm mt-2">
-          <span className="text-gray-600 dark:text-gray-400">Total Wins</span>
+          <span className="text-gray-600 dark:text-gray-400">
+            Összes győzelem
+          </span>
           <span className="font-semibold text-gray-900 dark:text-gray-100">
             {userStats.stats.wins}
           </span>
@@ -187,7 +151,7 @@ const PersonalBestCard = ({ userStats }) => {
 };
 
 // Top Players Card Component
-const TopPlayersCard = ({ topPlayers, onViewAll }) => (
+const TopPlayersCard = ({ topPlayers, showMore, onViewAll }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -196,13 +160,13 @@ const TopPlayersCard = ({ topPlayers, onViewAll }) => (
   >
     <div className="flex items-center justify-between mb-4">
       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-        Top Players
+        Legjobb játékosok
       </h3>
       <button
         onClick={onViewAll}
         className="text-sm text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
       >
-        View All
+        {showMore ? "Kevesebb mutatása" : "Több mutatása"}
       </button>
     </div>
 
@@ -214,23 +178,25 @@ const TopPlayersCard = ({ topPlayers, onViewAll }) => (
             className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 transition-colors"
           >
             <div className="flex items-center space-x-3">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  index === 0
-                    ? "bg-yellow-500 text-white"
-                    : index === 1
-                      ? "bg-gray-400 text-white"
-                      : "bg-orange-600 text-white"
-                }`}
-              >
-                {index + 1}
+              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                {player.photoURL ? (
+                  <img
+                    src={player.photoURL}
+                    alt={player.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-brand-gradient flex items-center justify-center text-white font-bold text-sm">
+                    {player.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
               <div>
                 <div className="font-semibold text-gray-900 dark:text-gray-100">
                   {player.name}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {player.stats.wins} wins
+                  {player.stats.wins} győzelem
                 </div>
               </div>
             </div>
@@ -239,7 +205,7 @@ const TopPlayersCard = ({ topPlayers, onViewAll }) => (
                 {player.winRate}%
               </div>
               <div className="text-xs text-gray-600 dark:text-gray-400">
-                win rate
+                nyerési arány
               </div>
             </div>
           </div>
@@ -261,8 +227,8 @@ const TopPlayersCard = ({ topPlayers, onViewAll }) => (
               />
             </svg>
           </div>
-          <p>No games played yet</p>
-          <p className="text-sm">Start a game to see the leaderboard!</p>
+          <p>Még nincsenek lejátszott meccsek</p>
+          <p className="text-sm">Játsz egy játékot, hogy lásd a ranglistát!</p>
         </div>
       )}
     </div>
@@ -274,6 +240,7 @@ const Dashboard = ({ onStartGame, activeGameId }) => {
   const [activeGame, setActiveGame] = React.useState(null);
   const [players, setPlayers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [showMoreTopPlayers, setShowMoreTopPlayers] = React.useState(false);
 
   // Subscribe to active game
   React.useEffect(() => {
@@ -299,11 +266,15 @@ const Dashboard = ({ onStartGame, activeGameId }) => {
         console.error("Error fetching players:", error);
       }
     };
-    fetchPlayers();
-  }, []);
+
+    // Only fetch players if user is authenticated
+    if (currentUser) {
+      fetchPlayers();
+    }
+  }, [currentUser]);
 
   // Calculate top players by win rate
-  const getTopPlayers = () => {
+  const getTopPlayers = (limit = 3) => {
     return players
       .filter((player) => player.stats && player.stats.matchesPlayed > 0)
       .map((player) => ({
@@ -316,7 +287,7 @@ const Dashboard = ({ onStartGame, activeGameId }) => {
             : 0,
       }))
       .sort((a, b) => b.winRate - a.winRate)
-      .slice(0, 3);
+      .slice(0, limit);
   };
 
   // Get current user's stats
@@ -326,7 +297,7 @@ const Dashboard = ({ onStartGame, activeGameId }) => {
   };
 
   const userStats = getUserStats();
-  const topPlayers = getTopPlayers();
+  const topPlayers = getTopPlayers(showMoreTopPlayers ? 10 : 3);
 
   if (loading) {
     return (
@@ -351,9 +322,8 @@ const Dashboard = ({ onStartGame, activeGameId }) => {
       <div className="space-y-8">
         <TopPlayersCard
           topPlayers={topPlayers}
-          onViewAll={() => {
-            /* Navigate to profile/stats */
-          }}
+          showMore={showMoreTopPlayers}
+          onViewAll={() => setShowMoreTopPlayers(!showMoreTopPlayers)}
         />
         <PersonalBestCard userStats={userStats} />
       </div>
